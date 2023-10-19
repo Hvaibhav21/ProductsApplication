@@ -1,0 +1,45 @@
+﻿@*@model NameModel*@
+
+@{
+    ViewData["Title"] = "Name";
+}
+<h1>Name</h1>
+Vaibhav from Products Controller Name action
+
+<div>
+    <tr>
+    <p>
+            The Name is : @ViewData["Name"] & It will repeat :@ViewData["times"] times
+    </p>
+    </tr>
+
+</div>
+
+@for (int i = 0; i < (int)ViewData["times"]; i++)
+{
+    <p>@ViewData["Name"]; </p> 
+    
+}
+
+<form method="post">
+    <div class="table-borderless">
+    <div>
+        <label>Name</label>
+        <input type="text" name="name" id="name" value="" />
+    </div>
+    <div>
+        <label>Times</label>
+        <input type="text" name="times" id="times" value="" />
+    </div>        
+        
+        <button  class="align-content-center" type="submit" value="Submit">Submit</button>
+    </div>
+</form>
+
+<a asp-controller="Home" asp-action="">Back</a>
+
+
+
+
+
+

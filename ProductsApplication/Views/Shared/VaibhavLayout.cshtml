@@ -1,0 +1,27 @@
+﻿
+@{
+}
+
+
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProductsApplication.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <header>
+        <a asp-controller="Home" asp-action="Index">Home</a>
+
+        <a asp-controller="Products" asp-action="Products">Go to Products</a>
+        <title>@ViewData["Title"] </title>
+
+        <div>
+            @RenderBody()
+        </div>
+        
+    </header>
+    <footer>
+    </footer>
+</body>
+
