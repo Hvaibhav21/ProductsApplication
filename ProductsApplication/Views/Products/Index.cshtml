@@ -1,7 +1,22 @@
-﻿@{
+﻿@model List<Products>
+
+@{
     ViewData["Title"] = "Products";
 }
 <h1>Index</h1>
-Vaibhav from Products Controller Index
 
-<a asp-controller="Home" asp-action="">Back</a>
+
+<a asp-contdoller="Products" asp-action="CreateProduct"> Create Product </a>
+<br />
+@foreach(var product in Model)
+{
+    <tr>
+        <td> @product.Id;</td>
+        <td> @product.Title;</td>
+        <td> @product.ReleaseDate;</td>
+        <td> @product.genre;</td>
+        <td> @product.Price;</td>
+    </tr>
+    <br />
+    
+}

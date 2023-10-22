@@ -16,4 +16,11 @@
     <PackageReference Include="NHibernate" Version="5.4.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Products\CreateProduct.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
