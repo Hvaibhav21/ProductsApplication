@@ -1,22 +1,91 @@
-﻿@model List<Products>
+﻿@model IEnumerable<Products>
 
 @{
     ViewData["Title"] = "Products";
+    Products products;
 }
-<h1>Index</h1>
+<h1>Index : @ViewData["Action"]</h1>
 
-
-<a asp-contdoller="Products" asp-action="CreateProduct"> Create Product </a>
-<br />
-@foreach(var product in Model)
+@if(Convert.ToString(ViewData["Action"]) == "Edit")
 {
-    <tr>
-        <td> @product.Id;</td>
-        <td> @product.Title;</td>
-        <td> @product.ReleaseDate;</td>
-        <td> @product.genre;</td>
-        <td> @product.Price;</td>
-    </tr>
-    <br />
-    
+    <p> 
+        @ViewData["Id"];
+    </p>
+    <div>Inside Edit View</div>
+ <div> 
+     @{  products = Model.FirstOrDefault(p=>p.Id == (int)ViewData["Id"]);
+      }
+        <form method="post" asp-action="EditProduct">
+            <table class=" table">
+                <tr>
+                    <td>
+                    <label name="Id">Id</label>
+                        <input name="Id"  type="text" id="Id" value="@products.Id">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <label name="Title">Title</label>
+                        <input name="Title" type="text" id="Title" value="@products.Title">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <label name="ReleaseDate">ReleaseDate</label>
+                        <input name="ReleaseDate" type="date" id="ReleaseDate" value="@products.ReleaseDate">
+                    </td>
+                </tr>
+                <tr>
+                <tr>
+                    <td>
+                    <label name="genre">genre</label>
+                        <input name="genre" type="text" id="genre" value="@products.genre">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <label name="Price">Price</label>
+                        <input name="Price" type="text" id="Price" value="@products.Price">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    <button type="submit">Submit</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        </div>
+    <a asp-action="">back</a>
 }
+else
+{
+    <a asp-contdoller="Products" asp-action="CreateProduct"> Create Product </a>
+    <br />
+    <table class="table">
+    <tr>
+            <th> @Html.DisplayNameFor(model=>model.Id)</th>
+            <th> @Html.DisplayNameFor(model=>model.Title)</th>
+            <th> @Html.DisplayNameFor(model=>model.ReleaseDate)</th>
+            <th> @Html.DisplayNameFor(model=>model.genre)</th>
+            <th> @Html.DisplayNameFor(model=>model.Price)</th>
+    </tr>
+
+    @foreach (var product in Model)
+    {
+        <tr>
+            <td> @Html.DisplayFor(model=>product.Id)</td>
+            <td> @Html.DisplayFor(model=>product.Title)</td>
+            <td> @product.ReleaseDate</td>
+            <td> @product.genre</td>
+            <td> @product.Price</td>
+            <td>
+                <a asp-action="EditProduct" asp-route-id="@product.Id"> Edit </a>
+
+            </td>
+        </tr>
+    }
+    </table>
+}
+
+

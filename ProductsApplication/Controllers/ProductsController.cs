@@ -9,7 +9,7 @@ namespace ProductsApplication.Controllers
     public class ProductsController : Controller
     {
         private readonly ProductsApplicationContext _productContext;
-        public ProductsController(ProductsApplicationContext productsApplicationContext) 
+        public ProductsController(ProductsApplicationContext productsApplicationContext)
         {
             _productContext = productsApplicationContext;
         }
@@ -19,18 +19,33 @@ namespace ProductsApplication.Controllers
                  new Product(2,"Sunsilk",2)
 
             };
-        
-
         public async Task<IActionResult> Index()
         {
-
             var products = await _productContext.Products.ToListAsync();
-
+            ViewData["Action"] = TempData["Action"];
+            ViewData["Id"] = TempData["id"];
             ViewData["Title"] = "Vaibhav View";
             return View(products);
         }
-
-
+        public async Task<IActionResult> EditProduct(int id=2)
+        {
+            TempData["Action"] = "Edit";
+            TempData["id"] = id;
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditProduct(int id, Products products)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id != products.Id) { NotFound(); }
+                _productContext.Products.Update(products);
+                await _productContext.SaveChangesAsync();
+            }
+            //var product = _productContext.Products.FindAsync(id);
+            //TempData["product"] = product;
+            return RedirectToAction("Index");
+        }
         [HttpPost]
         public async Task<IActionResult> AddProduct(Products products)
         {
@@ -39,48 +54,19 @@ namespace ProductsApplication.Controllers
                 var product = _productContext.Add(products);
                 await _productContext.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
 
             return RedirectToAction("Index");
         }
-        public IActionResult CreateProduct(string name="vaibhav")
+        public IActionResult CreateProduct(string name = "vaibhav")
         {
             return View();
         }
-        public IActionResult Products()
-        {
-           
-               
-            return View(products);
-        }
-        
-        public IActionResult Name(int times=1, string name="Vaibhav")
-        {
-            
-            ViewData["Name"] = name;
-            ViewData["times"] = times;
-            return View();
-        }
 
-        [HttpPost]
-        public IActionResult Name(Products products)
-        {
-            var product = _productContext.AddAsync(products);
-            return View(product);
 
-        }
-
-        public IActionResult setProduct(int id, string name, int validity)
-        {
-            ViewData["Title"] = "Vaibhav View";
-            var newProduct = new Product(id, name, validity);
-
-            products.Add(newProduct);
-           //return "Hello " + id;
-            return View(products);
-        }
+      
     }
 }
