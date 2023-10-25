@@ -65,8 +65,13 @@ namespace ProductsApplication.Controllers
         {
             return View();
         }
-
-
-      
+        
+        public string getDetails(int? price)
+        {
+            TempData["Action"] = "Details";
+            //TempData["Id"] = id;
+            //return RedirectToAction("Index");
+            return "Price : " + price;
+        }
     }
 }

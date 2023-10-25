@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Products>
+﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal;
+@model IEnumerable<Products>
 
 @{
     ViewData["Title"] = "Products";
@@ -13,7 +14,7 @@
     </p>
     <div>Inside Edit View</div>
  <div> 
-     @{  products = Model.FirstOrDefault(p=>p.Id == (int)ViewData["Id"]);
+     @{  products = Model.FirstOrDefault( p => p.Id == (int)ViewData["Id"]);
       }
         <form method="post" asp-action="EditProduct">
             <table class=" table">
@@ -58,7 +59,7 @@
         </div>
     <a asp-action="">back</a>
 }
-else
+else if (Convert.ToString(ViewData["Action"]) == "Create")
 {
     <a asp-contdoller="Products" asp-action="CreateProduct"> Create Product </a>
     <br />
@@ -81,11 +82,82 @@ else
             <td> @product.Price</td>
             <td>
                 <a asp-action="EditProduct" asp-route-id="@product.Id"> Edit </a>
+                <a asp-action="getDetails" asp-route-id="@product.Id"> Details </a>
+                @*<a asp-action="EditProduct" asp-route-id="@product.Id"> Edit </a>*@
 
             </td>
         </tr>
     }
     </table>
+}
+else if(Convert.ToString(ViewData["Action"])=="Details")
+{
+    @ViewData["Id"]
+    @Model.FirstOrDefault(p=>p.Id== (int)ViewData["Id"])       
+    <table>
+        <th>
+            
+                @Html.DisplayNameFor(model=>model.Id)
+                @Html.DisplayNameFor(model=>model.Title)
+                @Html.DisplayNameFor(model=>model.ReleaseDate)
+                @Html.DisplayNameFor(model=>model.genre)
+                @Html.DisplayNameFor(model=>model.Price)
+            
+        </th>
+        <tbody>
+            
+            <tr>
+                @*@Html.DisplayFor(model=>)*@
+            </tr>
+        </tbody>
+        
+
+    </table>
+       <p> Inside Details</p>
+}
+
+else 
+{
+    <p> Neither Edit nor Create </p>
+    <a asp-action="CreateProduct">Create Product</a>
+
+    <table class="table">
+        <theader>
+        <tr>
+            <th>@Html.DisplayNameFor(model=>model.Id)</th>
+            <th>@Html.DisplayNameFor(model=>model.Title)</th>
+            <th>@Html.DisplayNameFor(model=>model.ReleaseDate)</th>
+            <th>@Html.DisplayNameFor(model=>model.genre)</th>
+            <th>@Html.DisplayNameFor(model=>model.Price)</th>
+        </tr>
+        </theader>
+        <tbody>
+            @foreach(var Product in Model){
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem=>Product.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem=>Product.Title)
+                    </td>
+                     <td>
+                        @Html.DisplayFor(modelItem=>Product.ReleaseDate)
+                    </td>
+                     <td>
+                        @Html.DisplayFor(modelItem=>Product.genre)
+                    <td>
+                            @Html.DisplayFor(modelItem=>Product.Price)
+                    </td>
+                    <td>
+                        <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@Product.Id"> Edit</a>
+                        <a asp-controller="Products" asp-action="getDetails" asp-route-id="@Product.Id"> Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+    
 }
 
 
