@@ -3,14 +3,16 @@
 @{
     ViewData["Title"] = "EditProduct";
 }
-<h2> @ViewData["Title"]</h2>
 <form method="post" asp-action="EditProduct">
     <div>
+
+    <label>Id</label>
+    <input type="text" id="Id" name="Id" />
     <label>Title</label>
-        <input type="text" id="Title" name="Title" />
-        <br /><br />
+    <input type="text" id="Title" name="Title" />
+    <br /><br />
     <label>Date</label>
-        <input type="text" id="Date" name="Date" />
+    <input type="text" id="Date" name="Date" />
     </div>
     <br /><br />
     <label>genre</label>
@@ -18,7 +20,7 @@
     </div>       
     <br />
     <label>Price</label>
-    <input type="text" id="Price" />
+    <input type="text" id="Price" name="Price" />
     </div>
     <button type="submit">Create</button>
 </form>

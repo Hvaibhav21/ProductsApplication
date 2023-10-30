@@ -8,6 +8,7 @@ namespace ProductsApplication.Controllers
 {
     public class ProductsController : Controller
     {
+
         private readonly ProductsApplicationContext _productContext;
         public ProductsController(ProductsApplicationContext productsApplicationContext)
         {
@@ -25,23 +26,62 @@ namespace ProductsApplication.Controllers
             ViewData["Action"] = TempData["Action"];
             ViewData["Id"] = TempData["id"];
             ViewData["Title"] = "Vaibhav View";
+            ViewData["Message"]=TempData["Message"];
             return View(products);
         }
-        public async Task<IActionResult> EditProduct(int id=2)
+        public IActionResult EditProduct(int id=2)
         {
             TempData["Action"] = "Edit";
             TempData["id"] = id;
             return RedirectToAction("Index");
         }
-        [HttpPost]
-        public async Task<IActionResult> EditProduct(int id, Products products)
+        public async Task<IActionResult> DeleteProduct(int[] id)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if (id != products.Id) { NotFound(); }
-                _productContext.Products.Update(products);
-                await _productContext.SaveChangesAsync();
+                foreach(var Id in id)
+                {
+                    var product = _productContext.Products.FirstOrDefault(p => p.Id == Id);
+                    _productContext.Remove(product);
+                }
+                
+                _productContext.SaveChanges();
+
+                //var entry = _productContext.Entry(id);
+                //if (entry.State == EntityState.Deleted)
+                //{
+                //    TempData["Message"] = "Deleted the Product with id: " + id;
+                //}
+                TempData["id"] = id;
+                TempData["Action"] = "Delete";
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return RedirectToAction("Index");
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditProduct([Bind("Id,Title,ReleaseDate,genre,Price")]  Products products)
+        {
+                if (ModelState.IsValid)
+                {
+                    //if (id != products.Id) { NotFound(); }
+                    var product = _productContext.Products.Update(products);
+                    if (product.State == EntityState.Modified)
+                    {
+                        await _productContext.SaveChangesAsync();
+                    TempData["Message"] = "Data is updated";
+                    }
+                }
+                else
+                {
+                    TempData["Message"] = "Data is not updated";
+                }
+
+
             //var product = _productContext.Products.FindAsync(id);
             //TempData["product"] = product;
             return RedirectToAction("Index");
@@ -66,12 +106,11 @@ namespace ProductsApplication.Controllers
             return View();
         }
         
-        public string getDetails(int? price)
+        public IActionResult getDetails(int? id)
         {
             TempData["Action"] = "Details";
-            //TempData["Id"] = id;
-            //return RedirectToAction("Index");
-            return "Price : " + price;
+            TempData["Id"] = id;
+            return RedirectToAction("Index");
         }
     }
 }

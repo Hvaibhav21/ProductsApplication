@@ -9,10 +9,6 @@
 
 @if(Convert.ToString(ViewData["Action"]) == "Edit")
 {
-    <p> 
-        @ViewData["Id"];
-    </p>
-    <div>Inside Edit View</div>
  <div> 
      @{  products = Model.FirstOrDefault( p => p.Id == (int)ViewData["Id"]);
       }
@@ -92,38 +88,52 @@ else if (Convert.ToString(ViewData["Action"]) == "Create")
 }
 else if(Convert.ToString(ViewData["Action"])=="Details")
 {
-    @ViewData["Id"]
-    @Model.FirstOrDefault(p=>p.Id== (int)ViewData["Id"])       
-    <table>
-        <th>
-            
-                @Html.DisplayNameFor(model=>model.Id)
-                @Html.DisplayNameFor(model=>model.Title)
-                @Html.DisplayNameFor(model=>model.ReleaseDate)
-                @Html.DisplayNameFor(model=>model.genre)
-                @Html.DisplayNameFor(model=>model.Price)
-            
-        </th>
+    @ViewData["Id"]    
+    <table class="table">
+        <tr>
+            <th>@Html.DisplayNameFor(model=>model.Id)</th>
+            <th>@Html.DisplayNameFor(model=>model.Title) </th>
+            <th>@Html.DisplayNameFor(model=>model.ReleaseDate) </th>
+            <th>@Html.DisplayNameFor(model=>model.genre) </th>
+            <th>@Html.DisplayNameFor(model=>model.Price) </th>
+        </tr>
+       
         <tbody>
-            
-            <tr>
-                @*@Html.DisplayFor(model=>)*@
-            </tr>
+
+                @if (int.TryParse(Convert.ToString(ViewData["Id"]), out int id))
+                {
+                var product = @Model.FirstOrDefault(p => p.Id == id);
+
+                <tr>
+                    <td>@product.Id</td>
+                    <td>@product.Title</td>
+                    <td>@product.ReleaseDate</td>
+                    <td>@product.genre</td>
+                    <td>@product.Price</td>
+                    <td><a asp-action="EditProduct" asp-route-id=">@product.Id">Edit</a></td>
+                </tr>
+                }
+          
         </tbody>
         
-
+        
     </table>
-       <p> Inside Details</p>
+    <a asp-action=""> back</a>
 }
-
+else if (Convert.ToString(TempData["Action"]) == "Delete" )
+{
+    <p> The product with Id : @ViewData["Id"] deleted successfully</p>
+    <a asp-action="">back</a>
+}
 else 
 {
-    <p> Neither Edit nor Create </p>
+    <p> @ViewData["Message"]</p>
     <a asp-action="CreateProduct">Create Product</a>
 
     <table class="table">
         <theader>
         <tr>
+            <th></th>
             <th>@Html.DisplayNameFor(model=>model.Id)</th>
             <th>@Html.DisplayNameFor(model=>model.Title)</th>
             <th>@Html.DisplayNameFor(model=>model.ReleaseDate)</th>
@@ -134,6 +144,9 @@ else
         <tbody>
             @foreach(var Product in Model){
                 <tr>
+                    <td>
+                        <input type="checkbox" name="check">
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem=>Product.Id)
                     </td>
@@ -149,8 +162,9 @@ else
                             @Html.DisplayFor(modelItem=>Product.Price)
                     </td>
                     <td>
-                        <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@Product.Id"> Edit</a>
                         <a asp-controller="Products" asp-action="getDetails" asp-route-id="@Product.Id"> Details</a>
+                        <a asp-controller="Products" asp-action="EditProduct" asp-route-id="@Product.Id"> Edit</a>
+                        <a asp-controller="Products" asp-action="DeleteProduct" asp-route-id="@Product.Id"> Delete</a>
                     </td>
                 </tr>
             }
@@ -159,5 +173,3 @@ else
     </table>
     
 }
-
-
